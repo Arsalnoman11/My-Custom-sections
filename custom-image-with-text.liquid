@@ -1,0 +1,305 @@
+{%- assign featured_image = section.settings.featured_image -%}
+{%- assign background_image = section.settings.background_image -%}
+<style>
+  #section-id-{{ section.id }}{
+    padding-top: {{section.settings.padding_top}}px;
+    padding-bottom: {{section.settings.padding_bottom}}px;
+    position: relative;
+  }
+  @media only screen and (max-width: 749px) {
+    #section-id-{{section.id}}{
+      padding-top: {{section.settings.mobile_padding_top}}px;
+      padding-bottom: {{section.settings.mobile_padding_bottom}}px;
+    }
+  }
+  @media only screen and (max-width: {{ section.settings.section_max-width | plus: 20 }}px) {
+    .custom-image-with-text-page-width.container{
+      padding-inline: 20px;
+    }
+  }
+  .custom-image-with-text-content-heading,
+  .custom-image-with-text-content-description{
+    color: {{section.settings.text_color}} !important;
+  }
+  .custom-image-with-text-page-width.container {
+    margin-inline: auto;
+}
+  .custom-image-with-text-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+  .custom-image-with-text-flex > div {
+    width: 50%;
+  }
+  .custom-image-with-text-content-sub-heading{
+    margin-bottom: 20px;
+  }
+  .custom-image-with-text-content-heading{
+    margin-bottom: 12px;
+  }
+  a.custom-image-with-text-content-button.button.button--outline {
+    margin-top: 30px;
+  }
+img.custom-image-with-text-image {
+    width: 100%;
+}
+  @media only screen and (max-width: 749px) {
+    .custom-image-with-text-flex{
+      flex-direction: column !important;
+    }
+      .custom-image-with-text-flex > div {
+    width: 100%;
+        max-width: 100% !important;
+  }
+  }
+
+</style>
+<div
+  id="section-id-{{ section.id }}"
+  class="custom-image-with-text-wrapper color-scheme color-scheme--scheme-4"
+  style="background: url({{ background_image | image_url }});"
+>
+  <div
+    class="custom-image-with-text-page-width container"
+    {% if section.settings['section_max-width'] != blank %}
+      style="max-width: {{ section.settings['section_max-width'] }}px;"
+    {% endif %}
+  >
+    <div
+      class="custom-image-with-text-flex"
+      {% if section.settings.image_position == 'right' %}
+        style="flex-direction: row-reverse"
+      {% endif %}
+    >
+      <div
+        class="custom-image-with-text-image"
+        {% if section.settings['image_max-width'] != blank %}
+          style="max-width: {{ section.settings.image_max-width }}px;"
+        {% endif %}
+      >
+        {{
+          featured_image
+          | image_url: width: featured_image.width
+          | image_tag: class: 'custom-image-with-text-image', loading: 'lazy'
+        }}
+      </div>
+      <div
+        class="custom-image-with-text-content-wrapper"
+        style="text-align: {{ section.settings.text_alignment_ }}; max-width: {{ section.settings.text_max-width }}px;"
+      >
+        <h6 class="custom-image-with-text-content-sub-heading h6">{{ section.settings['sub-heading'] }}</h6>
+        <{{ section.settings.heading_type }} class="custom-image-with-text-content-heading {{ section.settings.heading_type }}">
+          {{ section.settings.heading }}
+        </{{ section.settings.heading_type }}>
+        <div class="custom-image-with-text-content-description rte">{{ section.settings.description }}</div>
+        <a href="{{ section.settings.button_url }}" class="custom-image-with-text-content-button button button--outline">
+          {{- section.settings.button_label -}}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+  "name": "Custom Image with Text",
+  "class": "custom-image-with-text",
+  "settings": [
+    {
+      "type": "radio",
+      "id": "image_position",
+      "label": "Image Position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment_",
+      "label": "Text alignment ",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "image_picker",
+      "id": "featured_image",
+      "label": "Featured Image"
+    },
+    {
+      "type": "text",
+      "id": "sub-heading",
+      "label": "Sub-Heading",
+      "default": "#1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "#1",
+      "placeholder": "Discover Wearable Art"
+    },
+    {
+      "type": "select",
+      "id": "heading_type",
+      "label": "Heading type",
+      "options": [
+        {
+          "value": "h1",
+          "label": "h1"
+        },
+        {
+          "value": "h2",
+          "label": "h2"
+        },
+        {
+          "value": "h3",
+          "label": "h3"
+        },
+        {
+          "value": "h4",
+          "label": "h4"
+        },
+        {
+          "value": "h5",
+          "label": "h5"
+        },
+        {
+          "value": "h6",
+          "label": "h6"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "GET STARTED"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button url"
+    },
+    {
+      "type": "header",
+      "content": "Widths and gaps"
+    },
+    {
+      "type": "number",
+      "id": "section_max-width",
+      "label": "Section max-width",
+      "info": "px"
+    },
+    {
+      "type": "number",
+      "id": "text_max-width",
+      "label": "Text max-width",
+      "info": "px"
+    },
+    {
+      "type": "number",
+      "id": "image_max-width",
+      "label": "Image max-width",
+      "info": "px"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Paddings"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 162,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 162,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile padding top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 162,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 162,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Image with Text"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
