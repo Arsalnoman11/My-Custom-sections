@@ -53,13 +53,16 @@ img.custom-image-with-text-image {
     width: 100%;
         max-width: 100% !important;
   }
+    .custom-image-with-text-content-wrapper {
+    text-align: center !important;
+  }
   }
 
 </style>
 <div
   id="section-id-{{ section.id }}"
   class="custom-image-with-text-wrapper color-scheme color-scheme--scheme-4"
-  style="background: url({{ background_image | image_url }});"
+  {% if background_image != blank %}style="background: url({{ background_image | image_url }});"{% endif %}
 >
   <div
     class="custom-image-with-text-page-width container"
@@ -73,6 +76,7 @@ img.custom-image-with-text-image {
         style="flex-direction: row-reverse"
       {% endif %}
     >
+      {% if featured_image != blank %}
       <div
         class="custom-image-with-text-image"
         {% if section.settings['image_max-width'] != blank %}
@@ -85,6 +89,7 @@ img.custom-image-with-text-image {
           | image_tag: class: 'custom-image-with-text-image', loading: 'lazy'
         }}
       </div>
+        {% endif %}
       <div
         class="custom-image-with-text-content-wrapper"
         style="text-align: {{ section.settings.text_alignment_ }}; max-width: {{ section.settings.text_max-width }}px;"
@@ -94,9 +99,11 @@ img.custom-image-with-text-image {
           {{ section.settings.heading }}
         </{{ section.settings.heading_type }}>
         <div class="custom-image-with-text-content-description rte">{{ section.settings.description }}</div>
-        <a href="{{ section.settings.button_url }}" class="custom-image-with-text-content-button button button--outline">
+        {% if section.settings.button_url != blank %}
+          <a href="{{ section.settings.button_url }}" class="custom-image-with-text-content-button button button--outline">
           {{- section.settings.button_label -}}
         </a>
+          {% endif %}
       </div>
     </div>
   </div>
